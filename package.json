@@ -4,7 +4,10 @@
   "version": "0.0.0",
   "private": true,
   "author": "Sendwithus",
-  "repository": "https://github.com/sendwithus/battlesnake-node",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sendwithus/battlesnake-node.git"
+  },
   "licenses": [
     {
       "type": "WTFPL",
@@ -26,5 +29,10 @@
   },
   "scripts": {
     "start": "nf start"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/sendwithus/battlesnake-node/issues"
+  },
+  "homepage": "https://github.com/sendwithus/battlesnake-node#readme",
+  "license": "ISC"
 }

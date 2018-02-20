@@ -1,13 +1,20 @@
 var express = require('express')
 var router  = express.Router()
-
+function getRandomColor() {
+  var letters = '0123456789ABCDEF';
+  var color = '#';
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
 // Handle POST request to '/start'
 router.post('/start', function (req, res) {
   // NOTE: Do something here to start the game
 
   // Response data
   var data = {
-    color: '#DFFF00',
+    color: getRandomColor,
     name: 'Node Snake',
     head_url: 'http://www.placecage.com/c/200/200', // optional, but encouraged!
     taunt: "Let's do thisss thang!", // optional, but encouraged!
