@@ -105,7 +105,7 @@ function cyclePath(moves,world,response){
   return response;
 
 }
-function setPath(moves,world,result){
+function setPath(moves,world,response){
   let target = setTarget(world);
   let result = [];
   let x = world.you.body.data[0].x;
