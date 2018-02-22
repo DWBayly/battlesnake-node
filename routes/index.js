@@ -15,9 +15,9 @@ router.post('/start', function (req, res) {
   // Response data
   var data = {
     color: getRandomColor,
-    name: 'Node Snake',
+    name: 'Hythonia the cruel',
     head_url: 'http://www.placecage.com/c/200/200', // optional, but encouraged!
-    taunt: "Let's do thisss thang!", // optional, but encouraged!
+    taunt: "How about a hiss ", // optional, but encouraged!
   }
 
   return res.json(data)
@@ -26,14 +26,18 @@ router.post('/start', function (req, res) {
 // Handle POST request to '/move'
 router.post('/move', function (req, res) {
   // NOTE: Do something here to generate your move
+  console.log(req.body);
 
   // Response data
-  var data = {
-    move: 'up', // one of: ['up','down','left','right']
-    taunt: 'Outta my way, snake!', // optional, but encouraged!
-  }
+  var data = getMove(world);
 
   return res.json(data)
 })
+function getMove(world){
+  let moves = ['up','down','left','right'];
+  let index = 0;
+  return {move:moves[0],taunt:'I will destroy you all!'}
+}
+
 
 module.exports = router
