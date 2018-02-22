@@ -29,15 +29,60 @@ router.post('/move', function (req, res) {
   console.log(req.body);
 
   // Response data
-  var data = getMove(world);
+  var data = getMove(req.body);
 
   return res.json(data)
 })
 function getMove(world){
-  let moves = ['up','down','left','right'];
-  let index = 0;
-  return {move:moves[0],taunt:'I will destroy you all!'}
+  let moves = checkBounds(world);
+  let response = {move:moves[Math.floor((Math.random()*moves.length))],taunt:'I will destroy you all!'}
+  console.log(response);
+  if(response.move.length===0){
+    return {move:'up',taunt:'Good Game everyone'};
+  }
+  return response;
 }
+function checkBounds(world){
+  //console.log(world);
+  let result = [];
+  let x = world.you.body.data[0].x;
+  let y = world.you.body.data[0].y;
+  if(!isBlocked(world,x+1,y)){
+    result.push('right');
+  }
+  if(!isBlocked(world,x-1,y)){
+    result.push('left');
+  }
+  if(!isBlocked(world,x,y+1)){
+    result.push('down');
+  }
+  if(!isBlocked(world,x,y-1)){
+    result.push('up');
+  }
+  console.log('Valid moves:'+result);
+  return result;
+}
+function isBlocked(world,x,y){
+  if(x>world.width||y>world.height||x<0||y<0){
+    console.log('Move :'+x+','+y+' Out of bounds');
+    return true;
+  }
+  for(let i in world.you.body.data){
+    if(world.you.body.data[i].x ===x && world.you.body.data[i].y ===y){
+      console.log('Move :'+x+','+y+'self collision');
+      return true;
+    }
+  }
+  for(let i in world.snakes.data){
+    for(let j in world.snakes.data[i].body.data){
+      if(world.snakes.data[i].body.data[j].x ===x && world.snakes.data[i].body.data[j].y===y){
+                  console.log('Move :'+x+','+y+' collision with enemy snake');
+        return true;
+      }
+    }
+  }
+  return false;
 
+}
 
 module.exports = router
