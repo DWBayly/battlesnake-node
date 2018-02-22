@@ -1,6 +1,7 @@
 function getMove(world){
   moves = checkBounds(world);
   let response = {move:moves[Math.floor((Math.random()*moves.length))],taunt:'I will destroy you all!'}
+  if(world.you.)
   console.log(response);
   if(response.move.length===0){
     return {move:'up',taunt:'Good Game everyone'};
@@ -28,7 +29,7 @@ function checkBounds(world){
   return result;
 }
 function isBlocked(world,x,y){
-  if(x>world.width||y>world.height||x<0||y<0){
+  if(x>=world.width||y>=world.height||x<0||y<0){
     console.log('Move :'+x+','+y+' Out of bounds');
     return true;
   }
@@ -49,6 +50,15 @@ function isBlocked(world,x,y){
   return false;
 
 }
+function setPath(moves,world){
+
+}
+
+
+
+
+
+
 let world = {
   food: {
     data: [
