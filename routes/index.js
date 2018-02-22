@@ -14,7 +14,7 @@ router.post('/start', function (req, res) {
 
   // Response data
   var data = {
-    color: getRandomColor,
+    color: getRandomColor(),
     name: 'Hythonia the cruel',
     head_url: 'http://www.placecage.com/c/200/200', // optional, but encouraged!
     taunt: "How about a hiss ", // optional, but encouraged!
@@ -34,11 +34,16 @@ router.post('/move', function (req, res) {
   return res.json(data)
 })
 function getMove(world){
-  let moves = checkBounds(world);
+  moves = checkBounds(world);
   let response = {move:moves[Math.floor((Math.random()*moves.length))],taunt:'I will destroy you all!'}
+  if(world.you.health<25){
+    response = setPath(moves,world,response);
+  }else{
+    response = cyclePath(moves,world,response);
+  }
   console.log(response);
   if(response.move.length===0){
-    return {move:'up',taunt:'Good Game everyone'};
+    return {move:'up',taunt:'Good Game everyone!'};
   }
   return response;
 }
@@ -76,7 +81,7 @@ function isBlocked(world,x,y){
   for(let i in world.snakes.data){
     for(let j in world.snakes.data[i].body.data){
       if(world.snakes.data[i].body.data[j].x ===x && world.snakes.data[i].body.data[j].y===y){
-                  console.log('Move :'+x+','+y+' collision with enemy snake');
+        console.log('Move :'+x+','+y+' collision with enemy snake');
         return true;
       }
     }
@@ -84,5 +89,67 @@ function isBlocked(world,x,y){
   return false;
 
 }
+function cyclePath(moves,world,response){
+  if(moves.includes('up')){
+    response.move = 'up';
+  }
+    if(moves.includes('left')){
+        response.move = 'left';
+  }
+    if(moves.includes('down')){
+        response.move = 'down';
+  }
+    if(moves.includes('right')){
+        response.move = 'right';
+  }
+  return response;
+
+}
+function setPath(moves,world,result){
+  let target = setTarget(world);
+  let result = [];
+  let x = world.you.body.data[0].x;
+  let y = world.you.body.data[0].y;
+  if(target){
+    console.log(target);
+    for(let i in moves){
+      if(moves[i]=== 'up' && target.y>y){
+        result.push(moves[i]);
+      }
+      if(moves[i]==='down' && target.y<y){
+        result.push(moves[i]);
+      }
+      if(moves[i]==='left' && target.x<x){
+        result.push(moves[i]);
+      }
+      if(moves[i]==='right'){
+        result.push(moves[i]);
+      }
+
+    }
+    response.move =result[Math.dloor((Math.random()*result.length))];
+  }
+  return response;
+}
+function setTarget(world){
+  let result=0;
+  let x = world.you.body.data[0].x;
+  let y = world.you.body.data[0].y;
+  let temp = 9999;
+  for(let i in world.food.data){
+    if(getDistance(world.food.data[i])<temp){
+      result = world.food.data[i];
+      temp = world.food.data[i];
+    }
+  }
+  if(result === 0){
+    return false;
+  }
+  return result;
+}
+function getDistance(x,y,dx,dy){
+  return Math.abs(x-dx)+Math.abs(y-dy);
+}
+
 
 module.exports = router
