@@ -1,5 +1,8 @@
 function getMove(world){
   moves = checkBounds(world);
+  if(moves.length===0){
+    return {move:'up',taunt:'Good Game everyone!'};
+  }
   let response = {move:moves[Math.floor((Math.random()*moves.length))],taunt:'I will destroy you all!'}
   if(world.you.health<25){
     response = setPath(moves,world,response);
@@ -7,9 +10,7 @@ function getMove(world){
     response = cyclePath(moves,world,response);
   }
   console.log(response);
-  if(response.move.length===0){
-    return {move:'up',taunt:'Good Game everyone!'};
-  }
+
   return response;
 }
 function checkBounds(world){
@@ -97,22 +98,6 @@ function cyclePath(moves,world,response){
   return response;
 }
 
-/*function cyclePath(moves,world,response){
-  if(moves.includes('up')){
-    response.move = 'up';
-  }
-    if(moves.includes('left')){
-        response.move = 'left';
-  }
-    if(moves.includes('down')){
-        response.move = 'down';
-  }
-    if(moves.includes('right')){
-        response.move = 'right';
-  }
-  return response;
-
-}*/
 function setPath(moves,world,result){
   let target = setTarget(world);
   let result = [];
@@ -169,7 +154,7 @@ function weighArea(world){
       if(isBlocked(world,x,y)){
         str+='X';
       }else{
-        str+='_'
+        str+='_';
       }
     }
     console.log(str);
@@ -185,21 +170,19 @@ function calculateArea(arr,world){
   let b = world.you.body.data[0].y;
   function recursive(x,y){
     if(!arr[x+1][y] && x<maxx){
-    result +=calculateArea(arr,num,x+1,y);
-  }
-  if(!arr[x-1][y] && x>0){
-    result +=calculateArea(arr,num,x-1,y);
-  }
-  if(!arr[x+1][y] && y<maxy){
-    result +=calculateArea(arr,num,x,y+1);
-  }
-  if(!arr[x+1][y] && y>0){
-    arr[x+1][y]=true;
-    result +=calculateArea(arr,num,x,y-1);
-  }
-    if(arr[x+1][y]&&arr[x-1][y]&&arr[x][y-1]&&arr[x][y+1]){
-      num+=1;
+      recursive(x+1,y);
     }
+    if(!arr[x-1][y] && x>0){
+      recursive(x-1,y);
+    }
+    if(!arr[x+1][y] && y<maxy){
+      calculateArea(arr,num,x,y+1);
+    }
+    if(!arr[x+1][y] && y>0){
+      arr[x+1][y]=true;
+      result +=calculateArea(arr,num,x,y-1);
+    }
+   num+=1;
   }
   return recursive(a,b);
 }

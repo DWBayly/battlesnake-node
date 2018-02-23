@@ -34,12 +34,11 @@ router.post('/move', function (req, res) {
   return res.json(data)
 })
 function getMove(world){
-  let moves = checkBounds(world);
-  if(response.move.length===0){
+  moves = checkBounds(world);
+  if(moves.length===0){
     return {move:'up',taunt:'Good Game everyone!'};
   }
   let response = {move:moves[Math.floor((Math.random()*moves.length))],taunt:'I will destroy you all!'}
-
   if(world.you.health<25){
     response = setPath(moves,world,response);
   }else{
@@ -133,7 +132,8 @@ function cyclePath(moves,world,response){
   }
   return response;
 }
-function setPath(moves,world,response){
+
+function setPath(moves,world,result){
   let target = setTarget(world);
   let result = [];
   let x = world.you.body.data[0].x;
@@ -150,12 +150,12 @@ function setPath(moves,world,response){
       if(moves[i]==='left' && target.x<x){
         result.push(moves[i]);
       }
-      if(moves[i]==='right' && target.x>x){
+      if(moves[i]==='right'){
         result.push(moves[i]);
       }
+
     }
-    response.taunt = "Finding Food, targetting " + target;
-    response.move =result[Math.floor(Math.random()*result.length)];
+    response.move =result[Math.dloor((Math.random()*result.length))];
   }
   return response;
 }
