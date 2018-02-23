@@ -139,7 +139,7 @@ function setPath(moves,world,response){
 
     }
     let final = weighArea(result);
-    response.move =final;
+    response.move =result[Math.floor(Math.random()*result.length)];
   }
   return response;
 }
