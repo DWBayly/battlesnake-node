@@ -26,7 +26,7 @@ router.post('/start', function (req, res) {
 // Handle POST request to '/move'
 router.post('/move', function (req, res) {
   // NOTE: Do something here to generate your move
-  console.log(req.body);
+  //console.log(req.body);
 
   // Response data
   var data = getMove(req.body);
@@ -36,7 +36,7 @@ router.post('/move', function (req, res) {
 function getMove(world){
   let moves = checkBounds(world);
   let response = {move:moves[Math.floor((Math.random()*moves.length))],taunt:'I will destroy you all!'}
-  if(world.you.health<85){
+  if(world.you.health<25){
     response = setPath(moves,world,response);
   }else{
     response = cyclePath(moves,world,response);
@@ -101,18 +101,21 @@ function isBlocked(world,x,y){
 
 }
 function cyclePath(moves,world,response){
-  if(moves.includes('up')){
-    response.move = 'up';
-  }
-    if(moves.includes('left')){
-        response.move = 'left';
-  }
-    if(moves.includes('down')){
-        response.move = 'down';
-  }
-    if(moves.includes('right')){
-        response.move = 'right';
-  }
+  let target = world.you.body.data[world.you.body.data.length];
+  for(let i in moves){
+      if(moves[i]=== 'up' && target.y>y){
+        result.push(moves[i]);
+      }
+      if(moves[i]==='down' && target.y<y){
+        result.push(moves[i]);
+      }
+      if(moves[i]==='left' && target.x<x){
+        result.push(moves[i]);
+      }
+      if(moves[i]==='right' && target.x>x){
+        result.push(moves[i]);
+      }
+    }
   return response;
 
 }
@@ -136,7 +139,6 @@ function setPath(moves,world,response){
       if(moves[i]==='right' && target.x>x){
         result.push(moves[i]);
       }
-
     }
     //let final = weighArea(result);
     response.move =result[Math.floor(Math.random()*result.length)];

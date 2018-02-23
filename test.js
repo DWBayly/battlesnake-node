@@ -144,6 +144,11 @@ function weighArea(moves,world){
     arr.push(temp);
   }
   //console.log(arr);
+  for(let x in arr){
+    for(let y in arr[x]){
+
+    }
+  }
 }
 
 console.log(getDistance(0,0,3,4));
