@@ -49,8 +49,10 @@ function isBlocked(world,x,y){
         for(let a = -1;a<2;a++){
           for(let b = -1 ; b<2;b++){
             //console.log(a,b);
-            if(world.snakes.data[i].body.data[0].y === y+a&&world.snakes.data[i].body.data[0].x === x+b){
-              return true;
+            if((a===0 || b===0) && (a!==b)){
+              if(world.snakes.data[i].body.data[0].y === y+a&&world.snakes.data[i].body.data[0].x === x+b){
+                return true;
+              }
             }
           }
         }
@@ -160,7 +162,7 @@ function weighArea(world){
     console.log(str);
     arr.push(temp);
   }
-  console.log(calculateArea)
+  //console.log(calculateArea(temp,world));
   //console.log(arr);
 }
 function calculateArea(arr,world){
@@ -169,22 +171,35 @@ function calculateArea(arr,world){
   let a = world.you.body.data[0].x;
   let b = world.you.body.data[0].y;
   function recursive(x,y){
-    if(!arr[x+1][y] && x<maxx){
-      recursive(x+1,y);
+    arr[x][y]=true;
+    num+=1;
+    if(num>10){
+      return;
     }
-    if(!arr[x-1][y] && x>0){
-      recursive(x-1,y);
+    if(x<arr[0].length){
+      if(!arr[x+1][y]){
+        recursive(x+1,y);
+      }
     }
-    if(!arr[x+1][y] && y<maxy){
-      calculateArea(arr,num,x,y+1);
+    if(x>0){
+      if(!arr[x-1][y]){
+        recursive(x-1,y);
+      }
     }
-    if(!arr[x+1][y] && y>0){
-      arr[x+1][y]=true;
-      calculateArea(arr,num,x,y-1);
+    if(y<arr.length){
+      if(!arr[x][y+1]){
+        recursive(x,y+1);
+      }
     }
-   num+=1;
+    if(y>0){
+      if(!arr[x][y-1]){
+        recursive(x,y-1);
+      }
+    }
+    return;
   }
-  return recursive(a,b);
+  recursive(a,b);
+  return num;
 }
 
 
@@ -303,5 +318,5 @@ let world = {
   }
 }
 
-//weighArea(world);
+weighArea(world);
 console.log(getMove(world));

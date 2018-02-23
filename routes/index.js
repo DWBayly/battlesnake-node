@@ -39,7 +39,7 @@ function getMove(world){
     return {move:'up',taunt:'Good Game everyone!'};
   }
   let response = {move:moves[Math.floor((Math.random()*moves.length))],taunt:'I will destroy you all!'}
-  if(world.you.health<25){
+  if(world.you.health<85){
     response = setPath(moves,world,response);
   }else{
     response = cyclePath(moves,world,response);
@@ -84,8 +84,10 @@ function isBlocked(world,x,y){
         for(let a = -1;a<2;a++){
           for(let b = -1 ; b<2;b++){
             //console.log(a,b);
-            if(world.snakes.data[i].body.data[0].y === y+a&&world.snakes.data[i].body.data[0].x === x+b){
-              return true;
+            if((a===0 || b===0) && (a!==b)){
+              if(world.snakes.data[i].body.data[0].y === y+a&&world.snakes.data[i].body.data[0].x === x+b){
+                return true;
+              }
             }
           }
         }
@@ -127,7 +129,7 @@ function cyclePath(moves,world,response){
       return response;
     }
     response.move =result[Math.floor(Math.random()*result.length)];
-    response.taunt = "Cycling, targetting " + target;
+    response.taunt = "Cycling, targetting " + target.toString();
     return response;
   }
   return response;
@@ -155,6 +157,7 @@ function setPath(moves,world,response){
       }
 
     }
+     response.taunt = "Finding food, targetting " + target.toString();
     response.move =result[Math.dloor((Math.random()*result.length))];
   }
   return response;
