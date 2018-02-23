@@ -104,7 +104,13 @@ function isBlocked(world,x,y){
 
 }
 function cyclePath(moves,world,response){
+  if(world.health>90){
+    return response;
+  }
+
+
   let target = world.you.body.data[world.you.body.data.length-1];
+
   let x = world.you.body.data[0].x;
   let y = world.you.body.data[0].y;
   console.log(world.you.body.data.length);
@@ -144,16 +150,16 @@ function setPath(moves,world,response){
     console.log(target);
     for(let i in moves){
       if(moves[i]=== 'up' && target.y>y){
-        result.push(moves[i]);
+        result.push('up');
       }
       if(moves[i]==='down' && target.y<y){
-        result.push(moves[i]);
+        result.push('down');
       }
       if(moves[i]==='left' && target.x<x){
-        result.push(moves[i]);
+        result.push('left');
       }
       if(moves[i]==='right' && target.x>x){
-        result.push(moves[i]);
+        result.push('right');
       }
     }
     response.taunt = "Finding food, targetting " + target.toString();
@@ -212,7 +218,7 @@ function mostSpace(moves,world){
       }
     }
   if(move === 0){
-    return moves[Math.dloor((Math.random()*result.length))];
+    return moves[Math.floor((Math.random()*result.length))];
   }
   return temp;
 
