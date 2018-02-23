@@ -69,28 +69,30 @@ function checkBounds(world){
 }
 function isBlocked(world,x,y){
   if(x>=world.width||y>=world.height||x<0||y<0){
-    console.log('Move :'+x+','+y+' Out of bounds');
+    //console.log('Move :'+x+','+y+' Out of bounds');
     return true;
   }
   for(let i in world.you.body.data){
     if(world.you.body.data[i].x ===x && world.you.body.data[i].y ===y){
-      console.log('Move :'+x+','+y+'self collision');
+      //console.log('Move :'+x+','+y+'self collision');
       return true;
     }
   }
   for(let i in world.snakes.data){
-    for(let j in world.snakes.data[i].body.data){
-      if(j===0){
-        for(let l = -1;l<2;l++){
-          for(let m = -1;m<2;m++){
-            if(world.snakes.data[i].body.data[j].x+l ===x && world.snakes.data[i].body.data[j].y+m===y){
+    if(world.snakes.data[i].name!=world.you.name){
+        for(let a = -1;a<2;a++){
+          for(let b = -1 ; b<2;b++){
+            //console.log(a,b);
+            if(world.snakes.data[i].body.data[0].y === y+a&&world.snakes.data[i].body.data[0].x === x+b){
               return true;
             }
           }
         }
       }
+    for(let j in world.snakes.data[i].body.data){
+
       if(world.snakes.data[i].body.data[j].x ===x && world.snakes.data[i].body.data[j].y===y){
-        console.log('Move :'+x+','+y+' collision with enemy snake');
+        //console.log('Move :'+x+','+y+' collision with enemy snake');
         return true;
       }
     }
@@ -131,12 +133,13 @@ function setPath(moves,world,response){
       if(moves[i]==='left' && target.x<x){
         result.push(moves[i]);
       }
-      if(moves[i]==='right'){
+      if(moves[i]==='right' && target.x>x){
         result.push(moves[i]);
       }
 
     }
-    response.move =result[Math.dloor((Math.random()*result.length))];
+    let final = weighArea(result);
+    response.move =final;
   }
   return response;
 }

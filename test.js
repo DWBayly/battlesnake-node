@@ -34,19 +34,30 @@ function checkBounds(world){
 }
 function isBlocked(world,x,y){
   if(x>=world.width||y>=world.height||x<0||y<0){
-    console.log('Move :'+x+','+y+' Out of bounds');
+    //console.log('Move :'+x+','+y+' Out of bounds');
     return true;
   }
   for(let i in world.you.body.data){
     if(world.you.body.data[i].x ===x && world.you.body.data[i].y ===y){
-      console.log('Move :'+x+','+y+'self collision');
+      //console.log('Move :'+x+','+y+'self collision');
       return true;
     }
   }
   for(let i in world.snakes.data){
+    if(world.snakes.data[i].name!=world.you.name){
+        for(let a = -1;a<2;a++){
+          for(let b = -1 ; b<2;b++){
+            //console.log(a,b);
+            if(world.snakes.data[i].body.data[0].y === y+a&&world.snakes.data[i].body.data[0].x === x+b){
+              return true;
+            }
+          }
+        }
+      }
     for(let j in world.snakes.data[i].body.data){
+
       if(world.snakes.data[i].body.data[j].x ===x && world.snakes.data[i].body.data[j].y===y){
-        console.log('Move :'+x+','+y+' collision with enemy snake');
+        //console.log('Move :'+x+','+y+' collision with enemy snake');
         return true;
       }
     }
@@ -65,7 +76,7 @@ function cyclePath(moves,world,response){
         response.move = 'down';
   }
     if(moves.includes('right')){
-        response.move = 'right';
+        response.move = 'up';
   }
   return response;
 
@@ -115,7 +126,25 @@ function setTarget(world){
 function getDistance(x,y,dx,dy){
   return Math.abs(x-dx)+Math.abs(y-dy);
 }
-
+function weighArea(moves,world){
+  let arr = [];
+  let temp = [];
+  for(let x =0;x<world.width;x++){
+    temp = [];
+    let str = '';
+    for(let y = 0; y <world.height;y++){
+      temp.push(isBlocked(world,x,y));
+      if(isBlocked(world,x,y)){
+        str+='X';
+      }else{
+        str+='_'
+      }
+    }
+    console.log(str);
+    arr.push(temp);
+  }
+  //console.log(arr);
+}
 
 console.log(getDistance(0,0,3,4));
 
@@ -141,18 +170,24 @@ let world = {
             {
               object: "point",
               x: 9,
-              y: 15
-            },
-            {
-              object: "point",
-              x: 13,
               y: 19
             },
             {
               object: "point",
-              x: 13,
+              x: 10,
+              y: 19
+            },
+            {
+              object: "point",
+              x: 11,
+              y: 19
+            },
+            {
+              object: "point",
+              x: 12,
               y: 19
             }
+
           ],
           object: "list"
         },
@@ -226,5 +261,5 @@ let world = {
   }
 }
 
-
-console.log(getMove(world));
+weighArea(['up','down'],world);
+//console.log(getMove(world));
