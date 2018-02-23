@@ -103,7 +103,7 @@ function isBlocked(world,x,y){
 function cyclePath(moves,world,response){
   let target = world.you.body.data[world.you.body.data.length];
   console.log(target);
-  if(target){}
+  if(target){
     for(let i in moves){
         if(moves[i]=== 'up' && target.y>y){
           result.push(moves[i]);
