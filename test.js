@@ -98,7 +98,7 @@ function cyclePath(moves,world,response){
   return response;
 }
 
-function setPath(moves,world,result){
+function setPath(moves,world,response){
   let target = setTarget(world);
   let result = [];
   let x = world.you.body.data[0].x;
@@ -180,7 +180,7 @@ function calculateArea(arr,world){
     }
     if(!arr[x+1][y] && y>0){
       arr[x+1][y]=true;
-      result +=calculateArea(arr,num,x,y-1);
+      calculateArea(arr,num,x,y-1);
     }
    num+=1;
   }
