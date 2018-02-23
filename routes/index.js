@@ -80,6 +80,15 @@ function isBlocked(world,x,y){
   }
   for(let i in world.snakes.data){
     for(let j in world.snakes.data[i].body.data){
+      if(j===0){
+        for(let l = -1;l<2;l++){
+          for(let m = -1;m<2;m++){
+            if(world.snakes.data[i].body.data[j].x+l ===x && world.snakes.data[i].body.data[j].y+m===y){
+              return true;
+            }
+          }
+        }
+      }
       if(world.snakes.data[i].body.data[j].x ===x && world.snakes.data[i].body.data[j].y===y){
         console.log('Move :'+x+','+y+' collision with enemy snake');
         return true;
