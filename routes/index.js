@@ -104,12 +104,11 @@ function isBlocked(world,x,y){
 
 }
 function cyclePath(moves,world,response){
-  if(world.health>90){
     return response;
-  }
 
 
-  let target = world.you.body.data[world.you.body.data.length-1];
+
+  /*let target = world.you.body.data[world.you.body.data.length-1];
 
   let x = world.you.body.data[0].x;
   let y = world.you.body.data[0].y;
@@ -138,7 +137,7 @@ function cyclePath(moves,world,response){
     response.taunt = "Cycling, targetting " + target.toString();
     return response;
   }
-  return response;
+  return response;*/
 }
 
 function setPath(moves,world,response){
