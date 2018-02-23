@@ -36,7 +36,7 @@ router.post('/move', function (req, res) {
 function getMove(world){
   moves = checkBounds(world);
   let response = {move:moves[Math.floor((Math.random()*moves.length))],taunt:'I will destroy you all!'}
-  if(world.you.health<25){
+  if(world.you.health<85){
     response = setPath(moves,world,response);
   }else{
     response = cyclePath(moves,world,response);
