@@ -26,7 +26,7 @@ router.post('/start', function (req, res) {
 // Handle POST request to '/move'
 router.post('/move', function (req, res) {
   // NOTE: Do something here to generate your move
-  //console.log(req.body);
+  console.log(req.body);
 
   // Response data
   var data = getMove(req.body);
@@ -39,7 +39,7 @@ function getMove(world){
     return {move:'up',taunt:'Good Game everyone!'};
   }
   let response = {move:moves[Math.floor((Math.random()*moves.length))],taunt:'I will destroy you all!'}
-  if(world.you.health<85){
+  if(world.you.health<50){
     response = setPath(moves,world,response);
   }else{
     response = cyclePath(moves,world,response);
@@ -128,7 +128,7 @@ function cyclePath(moves,world,response){
     if(result.length===0){
       return response;
     }
-    response.move =result[Math.floor(Math.random()*result.length)];
+    response.move =mostSpace(result,world);
     response.taunt = "Cycling, targetting " + target.toString();
     return response;
   }
@@ -152,13 +152,12 @@ function setPath(moves,world,response){
       if(moves[i]==='left' && target.x<x){
         result.push(moves[i]);
       }
-      if(moves[i]==='right'){
+      if(moves[i]==='right' && target.x>x){
         result.push(moves[i]);
       }
-
     }
-     response.taunt = "Finding food, targetting " + target.toString();
-    response.move =result[Math.dloor((Math.random()*result.length))];
+    response.taunt = "Finding food, targetting " + target.toString();
+    response.move =mostSpace(result,world);
   }
   return response;
 }
@@ -173,14 +172,95 @@ function setTarget(world){
       temp = world.food.data[i];
     }
   }
-  if(result === 0){
+  if(result.length === 0){
     return false;
   }
   return result;
 }
+function mostSpace(moves,world){
+  let move = false;
+  let highest = 0;
+  let temp = 0;
+  for(let i in moves){
+      if(moves[i]=== 'up'  ){
+        temp = weighArea(world,x,y-1);
+        if(temp>highest){
+          highest= temp;
+          move = moves[i];
+        }
+      }
+      if(moves[i]==='down'){
+        temp = weighArea(world,x,y+1);
+        if(temp>highest){
+          highest= temp;
+          move = moves[i];
+        }
+      }
+      if(moves[i]==='left'){
+        temp = weighArea(world,x-1,y);
+        if(temp>highest){
+          highest= temp;
+          move = moves[i];
+        }
+      }
+      if(moves[i]==='right'){
+        temp = weighArea(world,x+1,y);
+        if(temp>highest){
+          highest= temp;
+          move = moves[i];
+        }
+      }
+    }
+  if(move === 0){
+    return moves[Math.dloor((Math.random()*result.length))];
+  }
+  return temp;
+
+}
 function getDistance(x,y,dx,dy){
   return Math.abs(x-dx)+Math.abs(y-dy);
 }
-
+function weighArea(world,a,b){
+  let arr = [];
+  let temp = [];
+  for(let x =0;x<world.width;x++){
+    temp = [];
+    for(let y = 0; y <world.height;y++){
+      temp.push(isBlocked(world,x,y));
+    }
+    arr.push(temp);
+  }
+  let num = 0
+  function recursive(x,y){
+    arr[x][y]=true;
+    num+=1;
+    if(num>9000){
+      return;
+    }
+    if(x<arr.length-1){
+      if(arr[x+1][y]===false){
+        recursive(x+1,y);
+      }
+    }
+    if(x>0){
+      if(arr[x-1][y]===false ){
+        recursive(x-1,y);
+      }
+    }
+    if(y<arr.length-1){
+      if(arr[x][y+1]===false){
+        recursive(x,y+1);
+      }
+    }
+    if(y>0){
+      if(arr[x][y-1]===false){
+        recursive(x,y-1);
+      }
+    }
+    return;
+  }
+  recursive(a,b);
+  return num;
+}
 
 module.exports = router

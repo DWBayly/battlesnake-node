@@ -145,54 +145,40 @@ function setTarget(world){
 function getDistance(x,y,dx,dy){
   return Math.abs(x-dx)+Math.abs(y-dy);
 }
-function weighArea(world){
+function weighArea(world,a,b){
   let arr = [];
   let temp = [];
   for(let x =0;x<world.width;x++){
     temp = [];
-    let str = '';
     for(let y = 0; y <world.height;y++){
       temp.push(isBlocked(world,x,y));
-      if(isBlocked(world,x,y)){
-        str+='X';
-      }else{
-        str+='_';
-      }
     }
-    console.log(str);
     arr.push(temp);
   }
-  //console.log(calculateArea(temp,world));
-  //console.log(arr);
-}
-function calculateArea(arr,world){
-
   let num = 0
-  let a = world.you.body.data[0].x;
-  let b = world.you.body.data[0].y;
   function recursive(x,y){
     arr[x][y]=true;
     num+=1;
-    if(num>10){
+    if(num>9000){
       return;
     }
-    if(x<arr[0].length){
-      if(!arr[x+1][y]){
+    if(x<arr.length-1){
+      if(arr[x+1][y]===false){
         recursive(x+1,y);
       }
     }
     if(x>0){
-      if(!arr[x-1][y]){
+      if(arr[x-1][y]===false ){
         recursive(x-1,y);
       }
     }
-    if(y<arr.length){
-      if(!arr[x][y+1]){
+    if(y<arr.length-1){
+      if(arr[x][y+1]===false){
         recursive(x,y+1);
       }
     }
     if(y>0){
-      if(!arr[x][y-1]){
+      if(arr[x][y-1]===false){
         recursive(x,y-1);
       }
     }
@@ -201,8 +187,6 @@ function calculateArea(arr,world){
   recursive(a,b);
   return num;
 }
-
-
 console.log(getDistance(0,0,3,4));
 
 let world = {
@@ -232,12 +216,12 @@ let world = {
             {
               object: "point",
               x: 10,
-              y: 19
+              y: 18
             },
             {
               object: "point",
               x: 11,
-              y: 19
+              y: 18
             },
             {
               object: "point",
@@ -318,5 +302,6 @@ let world = {
   }
 }
 
-weighArea(world);
-console.log(getMove(world));
+console.log(weighArea(world,10,19));
+console.log(weighArea(world,12,13));
+//console.log(getMove(world));
