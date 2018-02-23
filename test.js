@@ -66,6 +66,38 @@ function isBlocked(world,x,y){
 
 }
 function cyclePath(moves,world,response){
+  let target = world.you.body.data[world.you.body.data.length-1];
+  let x = world.you.body.data[0].x;
+  let y = world.you.body.data[0].y;
+  console.log(world.you.body.data.length);
+  console.log(target);
+  let result = [];
+  if(target){
+    for(let i in moves){
+        if(moves[i]=== 'up' && target.y>y){
+          result.push(moves[i]);
+        }
+        if(moves[i]==='down' && target.y<y){
+          result.push(moves[i]);
+        }
+        if(moves[i]==='left' && target.x<x){
+          result.push(moves[i]);
+        }
+        if(moves[i]==='right' && target.x>x){
+          result.push(moves[i]);
+        }
+      }
+    if(result.length===0){
+      return response;
+    }
+    response.move =result[Math.floor(Math.random()*result.length)];
+    response.taunt = "Cycling, targetting " + target;
+    return response;
+  }
+  return response;
+}
+
+/*function cyclePath(moves,world,response){
   if(moves.includes('up')){
     response.move = 'up';
   }
@@ -76,11 +108,11 @@ function cyclePath(moves,world,response){
         response.move = 'down';
   }
     if(moves.includes('right')){
-        response.move = 'up';
+        response.move = 'right';
   }
   return response;
 
-}
+}*/
 function setPath(moves,world,result){
   let target = setTarget(world);
   let result = [];
@@ -126,7 +158,7 @@ function setTarget(world){
 function getDistance(x,y,dx,dy){
   return Math.abs(x-dx)+Math.abs(y-dy);
 }
-function weighArea(x,y,world){
+function weighArea(world){
   let arr = [];
   let temp = [];
   for(let x =0;x<world.width;x++){
@@ -143,20 +175,34 @@ function weighArea(x,y,world){
     console.log(str);
     arr.push(temp);
   }
-  console.log(calculateArea(arr,x,y));
+  console.log(calculateArea)
   //console.log(arr);
 }
-function calculateArea(arr,x,y){
+function calculateArea(arr,world){
+
   let num = 0
+  let a = world.you.body.data[0].x;
+  let b = world.you.body.data[0].y;
   function recursive(x,y){
+    if(!arr[x+1][y] && x<maxx){
+    result +=calculateArea(arr,num,x+1,y);
+  }
+  if(!arr[x-1][y] && x>0){
+    result +=calculateArea(arr,num,x-1,y);
+  }
+  if(!arr[x+1][y] && y<maxy){
+    result +=calculateArea(arr,num,x,y+1);
+  }
+  if(!arr[x+1][y] && y>0){
+    arr[x+1][y]=true;
+    result +=calculateArea(arr,num,x,y-1);
+  }
     if(arr[x+1][y]&&arr[x-1][y]&&arr[x][y-1]&&arr[x][y+1]){
       num+=1;
     }
   }
-  return recursive(x,y);
+  return recursive(a,b);
 }
-
-
 
 
 console.log(getDistance(0,0,3,4));
@@ -274,5 +320,5 @@ let world = {
   }
 }
 
-weighArea(['up','down'],world);
-//console.log(getMove(world));
+//weighArea(world);
+console.log(getMove(world));

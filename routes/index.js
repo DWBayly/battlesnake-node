@@ -35,16 +35,18 @@ router.post('/move', function (req, res) {
 })
 function getMove(world){
   let moves = checkBounds(world);
+  if(response.move.length===0){
+    return {move:'up',taunt:'Good Game everyone!'};
+  }
   let response = {move:moves[Math.floor((Math.random()*moves.length))],taunt:'I will destroy you all!'}
+
   if(world.you.health<25){
     response = setPath(moves,world,response);
   }else{
     response = cyclePath(moves,world,response);
   }
   console.log(response);
-  if(response.move.length===0){
-    return {move:'up',taunt:'Good Game everyone!'};
-  }
+
   return response;
 }
 function checkBounds(world){
@@ -101,8 +103,12 @@ function isBlocked(world,x,y){
 
 }
 function cyclePath(moves,world,response){
-  let target = world.you.body.data[world.you.body.data.length];
+  let target = world.you.body.data[world.you.body.data.length-1];
+  let x = world.you.body.data[0].x;
+  let y = world.you.body.data[0].y;
+  console.log(world.you.body.data.length);
   console.log(target);
+  let result = [];
   if(target){
     for(let i in moves){
         if(moves[i]=== 'up' && target.y>y){
@@ -118,6 +124,9 @@ function cyclePath(moves,world,response){
           result.push(moves[i]);
         }
       }
+    if(result.length===0){
+      return response;
+    }
     response.move =result[Math.floor(Math.random()*result.length)];
     response.taunt = "Cycling, targetting " + target;
     return response;
