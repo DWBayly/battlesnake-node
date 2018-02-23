@@ -30,7 +30,7 @@ router.post('/move', function (req, res) {
 
   // Response data
   var data = getMove(req.body);
-
+  console.log(data);
   return res.json(data)
 })
 function getMove(world){
