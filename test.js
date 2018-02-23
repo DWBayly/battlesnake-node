@@ -126,7 +126,7 @@ function setTarget(world){
 function getDistance(x,y,dx,dy){
   return Math.abs(x-dx)+Math.abs(y-dy);
 }
-function weighArea(moves,world){
+function weighArea(x,y,world){
   let arr = [];
   let temp = [];
   for(let x =0;x<world.width;x++){
@@ -143,13 +143,21 @@ function weighArea(moves,world){
     console.log(str);
     arr.push(temp);
   }
+  console.log(calculateArea(arr,x,y));
   //console.log(arr);
-  for(let x in arr){
-    for(let y in arr[x]){
-
+}
+function calculateArea(arr,x,y){
+  let num = 0
+  function recursive(x,y){
+    if(arr[x+1][y]&&arr[x-1][y]&&arr[x][y-1]&&arr[x][y+1]){
+      num+=1;
     }
   }
+  return recursive(x,y);
 }
+
+
+
 
 console.log(getDistance(0,0,3,4));
 

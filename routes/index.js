@@ -116,6 +116,7 @@ function cyclePath(moves,world,response){
         result.push(moves[i]);
       }
     }
+  response.taunt = "Cycling, targetting " + target;
   return response;
 
 }
@@ -140,7 +141,7 @@ function setPath(moves,world,response){
         result.push(moves[i]);
       }
     }
-    //let final = weighArea(result);
+    response.taunt = "Finding Food, targetting " + target;
     response.move =result[Math.floor(Math.random()*result.length)];
   }
   return response;
