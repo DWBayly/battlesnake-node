@@ -102,24 +102,27 @@ function isBlocked(world,x,y){
 }
 function cyclePath(moves,world,response){
   let target = world.you.body.data[world.you.body.data.length];
-  for(let i in moves){
-      if(moves[i]=== 'up' && target.y>y){
-        result.push(moves[i]);
+  console.log(target);
+  if(target){}
+    for(let i in moves){
+        if(moves[i]=== 'up' && target.y>y){
+          result.push(moves[i]);
+        }
+        if(moves[i]==='down' && target.y<y){
+          result.push(moves[i]);
+        }
+        if(moves[i]==='left' && target.x<x){
+          result.push(moves[i]);
+        }
+        if(moves[i]==='right' && target.x>x){
+          result.push(moves[i]);
+        }
       }
-      if(moves[i]==='down' && target.y<y){
-        result.push(moves[i]);
-      }
-      if(moves[i]==='left' && target.x<x){
-        result.push(moves[i]);
-      }
-      if(moves[i]==='right' && target.x>x){
-        result.push(moves[i]);
-      }
-    }
-  response.move =result[Math.floor(Math.random()*result.length)];
-  response.taunt = "Cycling, targetting " + target;
+    response.move =result[Math.floor(Math.random()*result.length)];
+    response.taunt = "Cycling, targetting " + target;
+    return response;
+  }
   return response;
-
 }
 function setPath(moves,world,response){
   let target = setTarget(world);
