@@ -116,6 +116,7 @@ function cyclePath(moves,world,response){
         result.push(moves[i]);
       }
     }
+  response.move =result[Math.floor(Math.random()*result.length)];
   response.taunt = "Cycling, targetting " + target;
   return response;
 
