@@ -1,5 +1,5 @@
 var express = require('express')
-var router  = express.Router()
+var router  = express.Router();
 function getRandomColor() {
   var letters = '0123456789ABCDEF';
   var color = '#';
@@ -26,7 +26,6 @@ router.post('/start', function (req, res) {
 // Handle POST request to '/move'
 router.post('/move', function (req, res) {
   // NOTE: Do something here to generate your move
-  console.log(req.body);
 
   // Response data
   var data = getMove(req.body);
@@ -42,7 +41,7 @@ function getMove(world){
   }
   let response = {move:moves[Math.floor((Math.random()*moves.length))],taunt:'I will destroy you all!'}
   //if(world.you.health<50){
-    response.taunt = 'Going for food';
+    response.taunt = 'Going for food'
     response = setPath(moves,world,response);
   /*}else{
     response.taunt = 'cycling'
@@ -108,35 +107,7 @@ function isBlocked(world,x,y){
 
 }
 function cyclePath(moves,world,response){
-  let target = world.you.body.data[world.you.body.data.length-1];
-  let x = world.you.body.data[0].x;
-  let y = world.you.body.data[0].y;
-  console.log(world.you.body.data.length);
-  console.log(target);
-  let result = [];
-  if(target){
-    for(let i in moves){
-        if(moves[i]=== 'up' && target.y>y){
-          result.push(moves[i]);
-        }
-        if(moves[i]==='down' && target.y<y){
-          result.push(moves[i]);
-        }
-        if(moves[i]==='left' && target.x<x){
-          result.push(moves[i]);
-        }
-        if(moves[i]==='right' && target.x>x){
-          result.push(moves[i]);
-        }
-      }
-    if(result.length===0){
-      return response;
-    }
-    response.move =mostSpace(result,world);
-    response.taunt = "Cycling, targetting " + target.toString();
     return response;
-  }
-  return response;
 }
 
 function setPath(moves,world,response){
@@ -148,16 +119,16 @@ function setPath(moves,world,response){
     console.log(target);
     for(let i in moves){
       if(moves[i]=== 'up' && target.y>y){
-        result.push(moves[i]);
+        result.push('up');
       }
       if(moves[i]==='down' && target.y<y){
-        result.push(moves[i]);
+        result.push('down');
       }
       if(moves[i]==='left' && target.x<x){
-        result.push(moves[i]);
+        result.push('left');
       }
       if(moves[i]==='right' && target.x>x){
-        result.push(moves[i]);
+        result.push('right');
       }
     }
     response.taunt = "Finding food, targetting " + target.toString();
@@ -217,7 +188,7 @@ function mostSpace(moves,world){
       }
     }
   if(move === 0){
-    return moves[Math.dloor((Math.random()*result.length))];
+    return moves[Math.floor((Math.random()*result.length))];
   }
   return temp;
 
@@ -282,3 +253,7 @@ function printArr(arr){
     console.log(temp);
   }
 }
+
+
+
+module.exports = router;
