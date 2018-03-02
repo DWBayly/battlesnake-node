@@ -1,15 +1,19 @@
 function getMove(world){
-  moves = checkBounds(world);
+  let moves = checkBounds(world);
+  console.log('Bounds Check Complete, Remaining moves:'+moves)
   if(moves.length===0){
+    console.log('No valid Move');
     return {move:'up',taunt:'Good Game everyone!'};
   }
   let response = {move:moves[Math.floor((Math.random()*moves.length))],taunt:'I will destroy you all!'}
-  if(world.you.health<25){
+  //if(world.you.health<50){
+    response.taunt = 'Going for food'
     response = setPath(moves,world,response);
-  }else{
+  /*}else{
+    response.taunt = 'cycling'
     response = cyclePath(moves,world,response);
-  }
-  console.log(response);
+  }*/
+  //console.log(response);
 
   return response;
 }
@@ -30,7 +34,7 @@ function checkBounds(world){
   if(!isBlocked(world,x,y-1)){
     result.push('up');
   }
-  console.log('Valid moves:'+result);
+  //console.log('Valid moves:'+result);
   return result;
 }
 function isBlocked(world,x,y){
@@ -50,7 +54,7 @@ function isBlocked(world,x,y){
           for(let b = -1 ; b<2;b++){
             //console.log(a,b);
             if((a===0 || b===0) && (a!==b)){
-              if(world.snakes.data[i].body.data[0].y === y+a&&world.snakes.data[i].body.data[0].x === x+b){
+              if(world.snakes.data[i].body.data[0].y === y+a&&world.snakes.data[i].body.data[0].x === x+b && world.snakes.data[i].length>=world.you.length){
                 return true;
               }
             }
@@ -93,8 +97,8 @@ function cyclePath(moves,world,response){
     if(result.length===0){
       return response;
     }
-    response.move =result[Math.floor(Math.random()*result.length)];
-    response.taunt = "Cycling, targetting " + target;
+    response.move =mostSpace(result,world);
+    response.taunt = "Cycling, targetting " + target.toString();
     return response;
   }
   return response;
@@ -117,12 +121,12 @@ function setPath(moves,world,response){
       if(moves[i]==='left' && target.x<x){
         result.push(moves[i]);
       }
-      if(moves[i]==='right'){
+      if(moves[i]==='right' && target.x>x){
         result.push(moves[i]);
       }
-
     }
-    response.move =result[Math.dloor((Math.random()*result.length))];
+    response.taunt = "Finding food, targetting " + target.toString();
+    response.move =mostSpace(result,world);
   }
   return response;
 }
@@ -137,10 +141,51 @@ function setTarget(world){
       temp = world.food.data[i];
     }
   }
-  if(result === 0){
+  if(result.length === 0){
+    console.log('no food found');
     return false;
   }
   return result;
+}
+function mostSpace(moves,world){
+  let move = false;
+  let highest = 0;
+  let temp = 0;
+  for(let i in moves){
+      if(moves[i]=== 'up'  ){
+        temp = weighArea(world,x,y-1);
+        if(temp>highest){
+          highest= temp;
+          move = moves[i];
+        }
+      }
+      if(moves[i]==='down'){
+        temp = weighArea(world,x,y+1);
+        if(temp>highest){
+          highest= temp;
+          move = moves[i];
+        }
+      }
+      if(moves[i]==='left'){
+        temp = weighArea(world,x-1,y);
+        if(temp>highest){
+          highest= temp;
+          move = moves[i];
+        }
+      }
+      if(moves[i]==='right'){
+        temp = weighArea(world,x+1,y);
+        if(temp>highest){
+          highest= temp;
+          move = moves[i];
+        }
+      }
+    }
+  if(move === 0){
+    return moves[Math.dloor((Math.random()*result.length))];
+  }
+  return temp;
+
 }
 function getDistance(x,y,dx,dy){
   return Math.abs(x-dx)+Math.abs(y-dy);
@@ -155,6 +200,7 @@ function weighArea(world,a,b){
     }
     arr.push(temp);
   }
+  printArr(arr);
   let num = 0
   function recursive(x,y){
     arr[x][y]=true;
@@ -186,6 +232,20 @@ function weighArea(world,a,b){
   }
   recursive(a,b);
   return num;
+}
+function printArr(arr){
+  let temp ='';
+  for(let i in arr){
+    temp = '';
+    for (let j in arr[i]) {
+      if(arr[i][j]){
+        temp+='X';
+      }else{
+        temp+='_';
+      }
+    }
+    console.log(temp);
+  }
 }
 console.log(getDistance(0,0,3,4));
 
@@ -304,4 +364,4 @@ let world = {
 
 console.log(weighArea(world,10,19));
 console.log(weighArea(world,12,13));
-//console.log(getMove(world));
+console.log(getMove(world));

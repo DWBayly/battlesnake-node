@@ -32,19 +32,23 @@ router.post('/move', function (req, res) {
   var data = getMove(req.body);
   console.log(data);
   return res.json(data)
-})
+});
 function getMove(world){
-  moves = checkBounds(world);
+  let moves = checkBounds(world);
+  console.log('Bounds Check Complete, Remaining moves:'+moves)
   if(moves.length===0){
+    console.log('No valid Move');
     return {move:'up',taunt:'Good Game everyone!'};
   }
   let response = {move:moves[Math.floor((Math.random()*moves.length))],taunt:'I will destroy you all!'}
-  if(world.you.health<50){
+  //if(world.you.health<50){
+    response.taunt = 'Going for food'
     response = setPath(moves,world,response);
-  }else{
+  /*}else{
+    response.taunt = 'cycling'
     response = cyclePath(moves,world,response);
-  }
-  console.log(response);
+  }*/
+  //console.log(response);
 
   return response;
 }
@@ -65,7 +69,7 @@ function checkBounds(world){
   if(!isBlocked(world,x,y-1)){
     result.push('up');
   }
-  console.log('Valid moves:'+result);
+  //console.log('Valid moves:'+result);
   return result;
 }
 function isBlocked(world,x,y){
@@ -85,7 +89,7 @@ function isBlocked(world,x,y){
           for(let b = -1 ; b<2;b++){
             //console.log(a,b);
             if((a===0 || b===0) && (a!==b)){
-              if(world.snakes.data[i].body.data[0].y === y+a&&world.snakes.data[i].body.data[0].x === x+b){
+              if(world.snakes.data[i].body.data[0].y === y+a&&world.snakes.data[i].body.data[0].x === x+b && world.snakes.data[i].length>=world.you.length){
                 return true;
               }
             }
@@ -173,6 +177,7 @@ function setTarget(world){
     }
   }
   if(result.length === 0){
+    console.log('no food found');
     return false;
   }
   return result;
@@ -230,6 +235,7 @@ function weighArea(world,a,b){
     }
     arr.push(temp);
   }
+  printArr(arr);
   let num = 0
   function recursive(x,y){
     arr[x][y]=true;
@@ -262,5 +268,17 @@ function weighArea(world,a,b){
   recursive(a,b);
   return num;
 }
-
-module.exports = router
+function printArr(arr){
+  let temp ='';
+  for(let i in arr){
+    temp = '';
+    for (let j in arr[i]) {
+      if(arr[i][j]){
+        temp+='X';
+      }else{
+        temp+='_';
+      }
+    }
+    console.log(temp);
+  }
+}
