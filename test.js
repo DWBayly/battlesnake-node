@@ -205,12 +205,12 @@ function weighArea(world,a,b){
     }
     arr.push(temp);
   }
-  printArr(arr);
+  //printArr(arr);
   let num = 0
   function recursive(x,y){
     arr[x][y]=true;
     num+=1;
-    if(num>9000){
+    if(num>30){
       return;
     }
     if(x<arr.length-1){
