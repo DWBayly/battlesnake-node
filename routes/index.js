@@ -112,6 +112,7 @@ function cyclePath(moves,world,response){
 
 function setPath(moves,world,response){
   let target = setTarget(world);
+  console.log('in setPath target:'+target);
   let result = [];
   let x = world.you.body.data[0].x;
   let y = world.you.body.data[0].y;
