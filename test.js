@@ -254,7 +254,8 @@ function printArr(arr){
 }
 console.log(getDistance(0,0,3,4));
 
-let world = {
+let world = 
+{
   food: {
     data: [
       {

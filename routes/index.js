@@ -29,7 +29,7 @@ router.post('/move', function (req, res) {
 
   // Response data
   var data = getMove(req.body);
-  console.log(data);
+  console.log('Sending:'+data);
   return res.json(data)
 });
 function getMove(world){
