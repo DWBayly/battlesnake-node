@@ -72,7 +72,7 @@ function checkBounds(world){
   return result;
 }
 function isBlocked(world,x,y){
-  if(x>=world.width||y>=world.height||x<=0||y<=0){
+  if(x>=world.width||y>=world.height||x<0||y<0){
     //console.log('Move :'+x+','+y+' Out of bounds');
     return true;
   }
@@ -107,32 +107,60 @@ function isBlocked(world,x,y){
 
 }
 function cyclePath(moves,world,response){
+  let target = world.you.body.data[world.you.body.data.length-1];
+  let x = world.you.body.data[0].x;
+  let y = world.you.body.data[0].y;
+  console.log(world.you.body.data.length);
+  console.log(target);
+  let result = [];
+  if(target){
+    for(let i in moves){
+        if(moves[i]=== 'up' && target.y>y){
+          result.push(moves[i]);
+        }
+        if(moves[i]==='down' && target.y<y){
+          result.push(moves[i]);
+        }
+        if(moves[i]==='left' && target.x<x){
+          result.push(moves[i]);
+        }
+        if(moves[i]==='right' && target.x>x){
+          result.push(moves[i]);
+        }
+      }
+    if(result.length===0){
+      return response;
+    }
+    response.move =mostSpace(result,world);
+    response.taunt = "Cycling, targetting " + target.toString();
     return response;
+  }
+  return response;
 }
 
 function setPath(moves,world,response){
   let target = setTarget(world);
-  console.log('in setPath target:'+target);
   let result = [];
   let x = world.you.body.data[0].x;
   let y = world.you.body.data[0].y;
+  //console.log('in set target:'+target);
   if(target){
     console.log(target);
     for(let i in moves){
       if(moves[i]=== 'up' && target.y>y){
-        result.push('up');
+        result.push(moves[i]);
       }
       if(moves[i]==='down' && target.y<y){
-        result.push('down');
+        result.push(moves[i]);
       }
       if(moves[i]==='left' && target.x<x){
-        result.push('left');
+        result.push(moves[i]);
       }
       if(moves[i]==='right' && target.x>x){
-        result.push('right');
+        result.push(moves[i]);
       }
     }
-    response.taunt = "Finding food, targetting " + target.toString();
+    response.taunt = 'Finding food at x:'+target.x+' y:'+target.y;
     response.move =mostSpace(result,world);
   }
   return response;
@@ -143,12 +171,12 @@ function setTarget(world){
   let y = world.you.body.data[0].y;
   let temp = 9999;
   for(let i in world.food.data){
-    if(getDistance(world.food.data[i])<temp){
+    if(getDistance(x,y,world.food.data[i].x,world.food.data[i].y)<temp){
       result = world.food.data[i];
       temp = world.food.data[i];
     }
   }
-  if(result.length === 0){
+  if(result === 0){
     console.log('no food found');
     return false;
   }
@@ -158,6 +186,8 @@ function mostSpace(moves,world){
   let move = false;
   let highest = 0;
   let temp = 0;
+  let x = world.you.body.data[0].x;
+  let y = world.you.body.data[0].y;
   for(let i in moves){
       if(moves[i]=== 'up'  ){
         temp = weighArea(world,x,y-1);
@@ -189,9 +219,9 @@ function mostSpace(moves,world){
       }
     }
   if(move === 0){
-    return moves[Math.floor((Math.random()*result.length))];
+    return moves[Math.dloor((Math.random()*result.length))];
   }
-  return temp;
+  return move;
 
 }
 function getDistance(x,y,dx,dy){
@@ -254,7 +284,4 @@ function printArr(arr){
     console.log(temp);
   }
 }
-
-
-
 module.exports = router;

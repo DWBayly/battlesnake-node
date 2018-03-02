@@ -109,7 +109,7 @@ function setPath(moves,world,response){
   let result = [];
   let x = world.you.body.data[0].x;
   let y = world.you.body.data[0].y;
-  console.log('in set target:'+target);
+  //console.log('in set target:'+target);
   if(target){
     console.log(target);
     for(let i in moves){
@@ -126,7 +126,7 @@ function setPath(moves,world,response){
         result.push(moves[i]);
       }
     }
-    response.taunt = "Finding food, targetting " + target.toString();
+    response.taunt = 'Finding food at x:'+target.x+' y:'+target.y;
     response.move =mostSpace(result,world);
   }
   return response;
@@ -137,12 +137,12 @@ function setTarget(world){
   let y = world.you.body.data[0].y;
   let temp = 9999;
   for(let i in world.food.data){
-    if(getDistance(world.food.data[i])<temp){
+    if(getDistance(x,y,world.food.data[i].x,world.food.data[i].y)<temp){
       result = world.food.data[i];
       temp = world.food.data[i];
     }
   }
-  if(result.length === 0){
+  if(result === 0){
     console.log('no food found');
     return false;
   }
@@ -152,6 +152,8 @@ function mostSpace(moves,world){
   let move = false;
   let highest = 0;
   let temp = 0;
+  let x = world.you.body.data[0].x;
+  let y = world.you.body.data[0].y;
   for(let i in moves){
       if(moves[i]=== 'up'  ){
         temp = weighArea(world,x,y-1);
@@ -185,7 +187,7 @@ function mostSpace(moves,world){
   if(move === 0){
     return moves[Math.dloor((Math.random()*result.length))];
   }
-  return temp;
+  return move;
 
 }
 function getDistance(x,y,dx,dy){
