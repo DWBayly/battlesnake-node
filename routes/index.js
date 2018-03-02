@@ -72,7 +72,7 @@ function checkBounds(world){
   return result;
 }
 function isBlocked(world,x,y){
-  if(x>=world.width||y>=world.height||x<0||y<0){
+  if(x>=world.width||y>=world.height||x<=0||y<=0){
     //console.log('Move :'+x+','+y+' Out of bounds');
     return true;
   }
