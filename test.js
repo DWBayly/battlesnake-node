@@ -240,10 +240,10 @@ function weighArea(world,a,b){
 }
 function printArr(arr){
   let temp ='';
-  for(let i in arr){
+  for(let i in arr[0]){
     temp = '';
-    for (let j in arr[i]) {
-      if(arr[i][j]){
+    for (let j in arr) {
+      if(arr[j][i]){
         temp+='X';
       }else{
         temp+='_';

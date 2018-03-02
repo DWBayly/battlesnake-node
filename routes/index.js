@@ -38,6 +38,8 @@ function getMove(world){
   if(moves.length===0){
     console.log('No valid Move');
     return {move:'up',taunt:'Good Game everyone!'};
+  }else if (moves.length===1){
+    return {move:moves[0],taunt:'I have no choice and I must scream'};
   }
   let response = {move:moves[Math.floor((Math.random()*moves.length))],taunt:'I will destroy you all!'}
   //if(world.you.health<50){
@@ -218,7 +220,7 @@ function mostSpace(moves,world){
         }
       }
     }
-  if(move === 0){
+  if(!move){
     return moves[Math.dloor((Math.random()*result.length))];
   }
   return move;
@@ -272,10 +274,10 @@ function weighArea(world,a,b){
 }
 function printArr(arr){
   let temp ='';
-  for(let i in arr){
+  for(let i in arr[0]){
     temp = '';
-    for (let j in arr[i]) {
-      if(arr[i][j]){
+    for (let j in arr) {
+      if(arr[j][i]){
         temp+='X';
       }else{
         temp+='_';
