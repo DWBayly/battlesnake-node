@@ -109,6 +109,7 @@ function setPath(moves,world,response){
   let result = [];
   let x = world.you.body.data[0].x;
   let y = world.you.body.data[0].y;
+  console.log('in set target:'+target);
   if(target){
     console.log(target);
     for(let i in moves){
