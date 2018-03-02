@@ -42,7 +42,7 @@ function getMove(world){
   }
   let response = {move:moves[Math.floor((Math.random()*moves.length))],taunt:'I will destroy you all!'}
   //if(world.you.health<50){
-    response.taunt = 'Going for food'
+    response.taunt = 'Going for food';
     response = setPath(moves,world,response);
   /*}else{
     response.taunt = 'cycling'
