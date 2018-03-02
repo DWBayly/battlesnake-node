@@ -108,12 +108,7 @@ function isBlocked(world,x,y){
 
 }
 function cyclePath(moves,world,response){
-    return response;
-
-
-
-  /*let target = world.you.body.data[world.you.body.data.length-1];
-
+  let target = world.you.body.data[world.you.body.data.length-1];
   let x = world.you.body.data[0].x;
   let y = world.you.body.data[0].y;
   console.log(world.you.body.data.length);
@@ -141,7 +136,7 @@ function cyclePath(moves,world,response){
     response.taunt = "Cycling, targetting " + target.toString();
     return response;
   }
-  return response;*/
+  return response;
 }
 
 function setPath(moves,world,response){
@@ -153,16 +148,16 @@ function setPath(moves,world,response){
     console.log(target);
     for(let i in moves){
       if(moves[i]=== 'up' && target.y>y){
-        result.push('up');
+        result.push(moves[i]);
       }
       if(moves[i]==='down' && target.y<y){
-        result.push('down');
+        result.push(moves[i]);
       }
       if(moves[i]==='left' && target.x<x){
-        result.push('left');
+        result.push(moves[i]);
       }
       if(moves[i]==='right' && target.x>x){
-        result.push('right');
+        result.push(moves[i]);
       }
     }
     response.taunt = "Finding food, targetting " + target.toString();
@@ -222,7 +217,7 @@ function mostSpace(moves,world){
       }
     }
   if(move === 0){
-    return moves[Math.floor((Math.random()*result.length))];
+    return moves[Math.dloor((Math.random()*result.length))];
   }
   return temp;
 
