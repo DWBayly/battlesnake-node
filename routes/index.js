@@ -39,7 +39,9 @@ function getMove(world){
   if(moves.length===0){
     console.log('No valid Move');
     moves = checkBounds(world,false);
-    if(moves.length===0){
+    if(moves.length!=0){
+      return  {move:moves[Math.floor((Math.random()*moves.length))],taunt:'Picking Random Move'}
+    }else{
       return  {move:'up',taunt:'gg!'};
     }
   }else if (moves.length===1){
@@ -181,15 +183,17 @@ function setTarget(world){
   let y = world.you.body.data[0].y;
   let temp = 9999;
   for(let i in world.food.data){
+    console.log(getDistance(x,y,world.food.data[i].x,world.food.data[i].y));
     if(getDistance(x,y,world.food.data[i].x,world.food.data[i].y)<temp){
       result = world.food.data[i];
-      temp = world.food.data[i];
+      temp = getDistance(x,y,world.food.data[i].x,world.food.data[i].y);
     }
   }
   if(result === 0){
     console.log('no food found');
     return false;
   }
+  console.log(temp);
   return result;
 }
 function mostSpace(moves,world,backup){

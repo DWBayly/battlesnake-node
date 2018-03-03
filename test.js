@@ -154,15 +154,17 @@ function setTarget(world){
   let y = world.you.body.data[0].y;
   let temp = 9999;
   for(let i in world.food.data){
+    console.log(getDistance(x,y,world.food.data[i].x,world.food.data[i].y));
     if(getDistance(x,y,world.food.data[i].x,world.food.data[i].y)<temp){
       result = world.food.data[i];
-      temp = world.food.data[i];
+      temp = getDistance(x,y,world.food.data[i].x,world.food.data[i].y);
     }
   }
   if(result === 0){
     console.log('no food found');
     return false;
   }
+  console.log(temp);
   return result;
 }
 function mostSpace(moves,world,backup){
