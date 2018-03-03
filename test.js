@@ -2,8 +2,7 @@ const fs = require('fs');
 
 
 
-
-
+let target = undefined;
 function getMove(world){
   let moves = checkBounds(world,true);
   console.log('Bounds Check Complete, Remaining moves:'+moves)
@@ -18,8 +17,46 @@ function getMove(world){
   }
   let response = {move:moves[Math.floor((Math.random()*moves.length))],taunt:'Picking Random Move'}
   //if(world.you.health<50){
-    response.taunt = 'Going for food'
+
+  if((world.you.length<world.width&&world.you.length<world.height)||world.you.health<50){
+    response.taunt = 'Going for food';
     response = setPath(moves,world,response);
+  }else{
+    response.taunt = 'Attacking!';
+    if(target === undefined){
+      if(world.length<world.height){
+        if(world.you.body.data[0].x>world.length/2){
+          target = {x:world.length-1,y:world.you.body.data[0].y};
+        }else{
+          target = {x:0,y:world.you.body.data[0].y};
+        }
+      }else{
+        if(world.you.body.data[0].x>world.length/2){
+          target = {x:world.you.body.data[0].x,y:world.height-1};
+        }else{
+          target = {x:world.you.body.data[0].x,y:0};
+        }
+      }
+    }else{
+      if(target.x ===world.you.body.data[0].x && target.y ===world.you.body.y){
+        if(world.length<world.height){
+          if(target.x ===0 ){
+            target.x=world.length;
+          }else{
+            target.x=0;
+          }
+        }else{
+          if(target.y ===0){
+            target.y=world.height;
+          }else{
+            target.y=0;
+          }
+        
+        }
+      }
+    }
+    targetSquare(target,moves,world,response);
+  }
   /*}else{
     response.taunt = 'cycling'
     response = cyclePath(moves,world,response);
@@ -116,7 +153,10 @@ function cyclePath(moves,world,response){
 
 function setPath(moves,world,response){
   let target = setTarget(world);
-  let result = [];
+  return targetSquare(target,moves,world,response);
+}
+function targetSquare(target,moves,world,response){
+    let result = [];
   let x = world.you.body.data[0].x;
   let y = world.you.body.data[0].y;
   //console.log('in set target:');
@@ -152,8 +192,6 @@ function setTarget(world){
   let y = world.you.body.data[0].y;
   let temp = 9999;
   for(let i in world.food.data){
-    //console.log(getDistance(x,y,world.food.data[i].x,world.food.data[i].y));
-
     if(getDistance(x,y,world.food.data[i].x,world.food.data[i].y)<temp){
       result = world.food.data[i];
       temp = getDistance(x,y,world.food.data[i].x,world.food.data[i].y);
