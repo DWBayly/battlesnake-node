@@ -273,6 +273,9 @@ function mostSpace(moves,world,backup){
     console.log('No move found');
     if(viables.length>0){
       return viables[Math.floor((Math.random()*viables.length))];
+    }else if(backup.length>0){
+      console.log(move,viables,backup)
+      return backup[Math.floor((Math.random()*backup.length))];
     }else{
       return 'up';
     }
