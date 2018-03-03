@@ -190,6 +190,7 @@ function setTarget(world){
 }
 function mostSpace(moves,world){
   console.log(moves);
+  let viables = [];
   let move = false;
   let highest = 0;
   let temp = 0;
@@ -224,10 +225,14 @@ function mostSpace(moves,world){
           move = moves[i];
         }
       }
+      if(temp>0){
+        viables.push(moves[i]);
+      }
     }
-  if(!move){
+  if(!move||temp ===0){
     console.log('No move found');
-    return moves[0];
+
+    return viables[Math.floor((Math.random()*viables.length))];
   }
   return move;
 
@@ -281,6 +286,9 @@ function weighArea(world,a,b){
     return;
   }
   recursive(a,b);
+  if(num<world.you.length-1){
+    return 0;
+  }
   return num;
 }
 function printArr(arr){
