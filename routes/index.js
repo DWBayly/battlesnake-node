@@ -34,7 +34,6 @@ router.post('/move', function (req, res) {
 });
 
 let target = undefined;
-let target = undefined;
 function getMove(world){
   let moves = checkBounds(world,true);
   console.log('Bounds Check Complete, Remaining moves:'+moves)
