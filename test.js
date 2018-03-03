@@ -17,8 +17,9 @@ function getMove(world){
   }
   let response = {move:moves[Math.floor((Math.random()*moves.length))],taunt:'Picking Random Move'}
   //if(world.you.health<50){
-
+  console.log(world.you.length);
   if((world.you.length<world.width&&world.you.length<world.height)||world.you.health<50){
+    console.log(world.you.health)
     response.taunt = 'Going for food';
     response = setPath(moves,world,response);
   }else{
@@ -312,12 +313,12 @@ function weighArea(world,a,b,despiration){
   function recursive(x,y){
     //console.log(arr.length);
     //console.log(arr[arr.length-1].length);
-    if(x>arr.length-1 ||y>arr.length-1 ||x<0||y<0){
+    if(x>arr.length-1 ||y>arr[0].length-1 ||x<0||y<0){
       return;
     }
     arr[x][y]=true;
     num+=1;
-    if(num>900){
+    if(num>9000){
       return;
     }
     if(x<arr.length-1){
@@ -343,6 +344,7 @@ function weighArea(world,a,b,despiration){
     return;
   }
   recursive(a,b);
+  console.log(num);
   if(num<world.you.length-1 &&!despiration){
     return 0;
   }
