@@ -33,6 +33,7 @@ router.post('/move', function (req, res) {
   return res.json(data)
 });
 
+
 function getMove(world){
   let moves = checkBounds(world,true);
   console.log('Bounds Check Complete, Remaining moves:'+moves)
@@ -184,6 +185,7 @@ function setTarget(world){
   let temp = 9999;
   for(let i in world.food.data){
     //console.log(getDistance(x,y,world.food.data[i].x,world.food.data[i].y));
+
     if(getDistance(x,y,world.food.data[i].x,world.food.data[i].y)<temp){
       result = world.food.data[i];
       temp = getDistance(x,y,world.food.data[i].x,world.food.data[i].y);
@@ -206,28 +208,28 @@ function mostSpace(moves,world,backup){
   let y = world.you.body.data[0].y;
   for(let i in moves){
       if(moves[i]=== 'up'  ){
-        temp = weighArea(world,x,y-1);
+        temp = weighArea(world,x,y-1,false);
         if(temp>highest){
           highest= temp;
           move = moves[i];
         }
       }
       if(moves[i]==='down'){
-        temp = weighArea(world,x,y+1);
+        temp = weighArea(world,x,y+1,false);
         if(temp>highest){
           highest= temp;
           move = moves[i];
         }
       }
       if(moves[i]==='left'){
-        temp = weighArea(world,x-1,y);
+        temp = weighArea(world,x-1,y,false);
         if(temp>highest){
           highest= temp;
           move = moves[i];
         }
       }
       if(moves[i]==='right'){
-        temp = weighArea(world,x+1,y);
+        temp = weighArea(world,x+1,y,false);
         if(temp>highest){
           highest= temp;
           move = moves[i];
@@ -239,29 +241,29 @@ function mostSpace(moves,world,backup){
       }*/
   }
   for(let i in backup){
-          if(backup[i]=== 'up'  ){
-        temp = weighArea(world,x,y-1);
+          if(backup[i]=== 'up'){
+        temp = weighArea(world,x,y-1,true);
         if(temp>highest){
           highest= temp;
           move = backup[i];
         }
       }
       if(backup[i]==='down'){
-        temp = weighArea(world,x,y+1);
+        temp = weighArea(world,x,y+1,true);
         if(temp>highest){
           highest= temp;
           move = backup[i];
         }
       }
       if(backup[i]==='left'){
-        temp = weighArea(world,x-1,y);
+        temp = weighArea(world,x-1,y,true);
         if(temp>highest){
           highest= temp;
           move = backup[i];
         }
       }
       if(backup[i]==='right'){
-        temp = weighArea(world,x+1,y);
+        temp = weighArea(world,x+1,y,true);
         if(temp>highest){
           highest= temp;
           move = backup[i];
@@ -289,7 +291,7 @@ function mostSpace(moves,world,backup){
 function getDistance(x,y,dx,dy){
   return Math.abs(x-dx)+Math.abs(y-dy);
 }
-function weighArea(world,a,b){
+function weighArea(world,a,b,despiration){
   let arr = [];
   let temp = [];
   for(let x =0;x<world.width;x++){
@@ -335,7 +337,7 @@ function weighArea(world,a,b){
     return;
   }
   recursive(a,b);
-  if(num<world.you.length-1){
+  if(num<world.you.length-1 &&!despiration){
     return 0;
   }
   return num;
