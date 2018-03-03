@@ -45,13 +45,22 @@ function getMove(world){
           }else{
             target.x=0;
           }
+          if(target.y>world.length/2){
+            target.y--;
+          }else{
+            target.y++;
+          }
         }else{
           if(target.y ===0){
             target.y=world.height;
           }else{
             target.y=0;
           }
-        
+          if(target.x>world.length/2){
+            target.x--;
+          }else{
+            target.x++;
+          }
         }
       }
     }
