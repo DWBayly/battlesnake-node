@@ -5,11 +5,16 @@ const fs = require('fs');
 
 
 function getMove(world){
-  let moves = checkBounds(world);
+  let moves = checkBounds(world,true);
   console.log('Bounds Check Complete, Remaining moves:'+moves)
   if(moves.length===0){
     console.log('No valid Move');
-    return {move:'up',taunt:'Good Game everyone!'};
+    moves = checkBounds(world,false);
+    if(moves.length!=0){
+      return  {move:moves[Math.floor((Math.random()*moves.length))],taunt:'Picking Random Move'}
+    }else{
+      return  {move:'up',taunt:'gg!'};
+    }
   }else if (moves.length===1){
     return {move:moves[0],taunt:'I have no choice and I must scream'};
   }
@@ -25,27 +30,27 @@ function getMove(world){
 
   return response;
 }
-function checkBounds(world){
+function checkBounds(world,despiration){
   //console.log(world);
   let result = [];
   let x = world.you.body.data[0].x;
   let y = world.you.body.data[0].y;
-  if(!isBlocked(world,x+1,y)){
+  if(!isBlocked(world,x+1,y,despiration)){
     result.push('right');
   }
-  if(!isBlocked(world,x-1,y)){
+  if(!isBlocked(world,x-1,y,despiration)){
     result.push('left');
   }
-  if(!isBlocked(world,x,y+1)){
+  if(!isBlocked(world,x,y+1,despiration)){
     result.push('down');
   }
-  if(!isBlocked(world,x,y-1)){
+  if(!isBlocked(world,x,y-1,despiration)){
     result.push('up');
   }
   //console.log('Valid moves:'+result);
   return result;
 }
-function isBlocked(world,x,y){
+function isBlocked(world,x,y,despiration){
   if(x>=world.width||y>=world.height||x<0||y<0){
     //console.log('Move :'+x+','+y+' Out of bounds');
     return true;
@@ -62,14 +67,14 @@ function isBlocked(world,x,y){
           for(let b = -1 ; b<2;b++){
             //console.log(a,b);
             if((a===0 || b===0) && (a!==b)){
-              if(world.snakes.data[i].body.data[0].y === y+a&&world.snakes.data[i].body.data[0].x === x+b && world.snakes.data[i].length>=world.you.length){
+              if(world.snakes.data[i].body.data[0].y === y+a&&world.snakes.data[i].body.data[0].x === x+b && world.snakes.data[i].length>=world.you.length && despiration){
                 return true;
               }
             }
           }
         }
       }
-    for(let j in world.snakes.data[i].body.data){
+    for(let j in world.snakes.data[i].body.data ){
       if(world.snakes.data[i].body.data[j].x ===x && world.snakes.data[i].body.data[j].y===y){
         //console.log('Move :'+x+','+y+' collision with enemy snake');
         return true;
@@ -138,7 +143,7 @@ function setPath(moves,world,response){
       return response;
     }
     response.taunt = 'Finding food at x:'+target.x+' y:'+target.y;
-    response.move =mostSpace(result,world);
+    response.move =mostSpace(result,world,moves);
   }
   return response;
 }
@@ -159,7 +164,7 @@ function setTarget(world){
   }
   return result;
 }
-function mostSpace(moves,world){
+function mostSpace(moves,world,backup){
   console.log(moves);
   let viables = [];
   let move = false;
@@ -196,17 +201,51 @@ function mostSpace(moves,world){
           move = moves[i];
         }
       }
-      console.log(moves[i]+':'+temp);
-      if(temp>0){
+      //console.log(moves[i]+':'+temp);
+     /*if(temp>0){
         viables.push(moves[i]);
+      }*/
+  }
+  for(let i in backup){
+          if(backup[i]=== 'up'  ){
+        temp = weighArea(world,x,y-1);
+        if(temp>highest){
+          highest= temp;
+          move = backup[i];
+        }
       }
-    }
+      if(backup[i]==='down'){
+        temp = weighArea(world,x,y+1);
+        if(temp>highest){
+          highest= temp;
+          move = backup[i];
+        }
+      }
+      if(backup[i]==='left'){
+        temp = weighArea(world,x-1,y);
+        if(temp>highest){
+          highest= temp;
+          move = backup[i];
+        }
+      }
+      if(backup[i]==='right'){
+        temp = weighArea(world,x+1,y);
+        if(temp>highest){
+          highest= temp;
+          move = backup[i];
+        }
+      }
+      console.log(backup[i]+':'+temp);
+      if(temp>0){
+        viables.push(backup[i]);
+      }
+  }
   if(!move||temp===0){
     console.log('No move found');
     if(viables.length>0){
       return viables[Math.floor((Math.random()*viables.length))];
     }else{
-      return moves[0];
+      return 'up';
     }
   }
   return move;
