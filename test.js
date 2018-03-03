@@ -139,6 +139,7 @@ function setPath(moves,world,response){
       }
     }
     if(result.length===0){
+      response.move = mostSpace(moves,world,moves);
       response.taunt = 'No better move than' +response.move;
       return response;
     }
