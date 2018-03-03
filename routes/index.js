@@ -188,7 +188,7 @@ function setTarget(world){
   }
   return result;
 }
-function mostSpace(moves,world,response){
+function mostSpace(moves,world){
   console.log(moves);
   let move = false;
   let highest = 0;
@@ -227,7 +227,7 @@ function mostSpace(moves,world,response){
     }
   if(!move){
     console.log('No move found');
-    return ;
+    return moves[0];
   }
   return move;
 
