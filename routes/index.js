@@ -32,6 +32,7 @@ router.post('/move', function (req, res) {
   console.log('Sending:'+data.move);
   return res.json(data)
 });
+
 function getMove(world){
   let moves = checkBounds(world);
   console.log('Bounds Check Complete, Remaining moves:'+moves)
@@ -148,10 +149,10 @@ function setPath(moves,world,response){
   if(target){
     console.log(target);
     for(let i in moves){
-      if(moves[i]=== 'up' && target.y>y){
+      if(moves[i]=== 'up' && target.y<y){
         result.push(moves[i]);
       }
-      if(moves[i]==='down' && target.y<y){
+      if(moves[i]==='down' && target.y>y){
         result.push(moves[i]);
       }
       if(moves[i]==='left' && target.x<x){
@@ -247,8 +248,8 @@ function weighArea(world,a,b){
   printArr(arr);
   let num = 0;
   function recursive(x,y){
-    console.log(arr.length);
-    console.log(arr[arr.length-1].length);
+    //console.log(arr.length);
+    //console.log(arr[arr.length-1].length);
     if(x>arr.length-1 ||y>arr.length-1 ||x<0||y<0){
       return;
     }
