@@ -183,7 +183,7 @@ function setTarget(world){
   let y = world.you.body.data[0].y;
   let temp = 9999;
   for(let i in world.food.data){
-    console.log(getDistance(x,y,world.food.data[i].x,world.food.data[i].y));
+    //console.log(getDistance(x,y,world.food.data[i].x,world.food.data[i].y));
     if(getDistance(x,y,world.food.data[i].x,world.food.data[i].y)<temp){
       result = world.food.data[i];
       temp = getDistance(x,y,world.food.data[i].x,world.food.data[i].y);
@@ -193,7 +193,7 @@ function setTarget(world){
     console.log('no food found');
     return false;
   }
-  console.log(temp);
+  //console.log(temp);
   return result;
 }
 function mostSpace(moves,world,backup){
