@@ -1,3 +1,9 @@
+const fs = require('fs');
+
+
+
+
+
 function getMove(world){
   let moves = checkBounds(world);
   console.log('Bounds Check Complete, Remaining moves:'+moves)
@@ -7,7 +13,7 @@ function getMove(world){
   }else if (moves.length===1){
     return {move:moves[0],taunt:'I have no choice and I must scream'};
   }
-  let response = {move:moves[Math.floor((Math.random()*moves.length))],taunt:'I will destroy you all!'}
+  let response = {move:moves[Math.floor((Math.random()*moves.length))],taunt:'Picking Random Move'}
   //if(world.you.health<50){
     response.taunt = 'Going for food'
     response = setPath(moves,world,response);
@@ -64,7 +70,6 @@ function isBlocked(world,x,y){
         }
       }
     for(let j in world.snakes.data[i].body.data){
-
       if(world.snakes.data[i].body.data[j].x ===x && world.snakes.data[i].body.data[j].y===y){
         //console.log('Move :'+x+','+y+' collision with enemy snake');
         return true;
@@ -111,7 +116,7 @@ function setPath(moves,world,response){
   let result = [];
   let x = world.you.body.data[0].x;
   let y = world.you.body.data[0].y;
-  //console.log('in set target:'+target);
+  //console.log('in set target:');
   if(target){
     console.log(target);
     for(let i in moves){
@@ -127,6 +132,10 @@ function setPath(moves,world,response){
       if(moves[i]==='right' && target.x>x){
         result.push(moves[i]);
       }
+    }
+    if(result.length===0){
+      response.taunt = 'No better move than' +response.move;
+      return response;
     }
     response.taunt = 'Finding food at x:'+target.x+' y:'+target.y;
     response.move =mostSpace(result,world);
@@ -150,7 +159,8 @@ function setTarget(world){
   }
   return result;
 }
-function mostSpace(moves,world){
+function mostSpace(moves,world,response){
+  console.log(moves);
   let move = false;
   let highest = 0;
   let temp = 0;
@@ -187,7 +197,8 @@ function mostSpace(moves,world){
       }
     }
   if(!move){
-    return moves[Math.dloor((Math.random()*result.length))];
+    console.log('No move found');
+    return ;
   }
   return move;
 
@@ -205,12 +216,17 @@ function weighArea(world,a,b){
     }
     arr.push(temp);
   }
-  //printArr(arr);
-  let num = 0
+  printArr(arr);
+  let num = 0;
   function recursive(x,y){
+    console.log(arr.length);
+    console.log(arr[arr.length-1].length);
+    if(x>arr.length-1 ||y>arr.length-1 ||x<0||y<0){
+      return;
+    }
     arr[x][y]=true;
     num+=1;
-    if(num>30){
+    if(num>9000){
       return;
     }
     if(x<arr.length-1){
@@ -254,7 +270,8 @@ function printArr(arr){
 }
 console.log(getDistance(0,0,3,4));
 
-let world = 
+
+/*
 {
   food: {
     data: [
@@ -366,8 +383,12 @@ let world =
     object: "snake",
     taunt: ""
   }
-}
+}*/
 
-console.log(weighArea(world,10,19));
-console.log(weighArea(world,12,13));
-console.log(getMove(world));
+
+fs.readFile('test.json',function(err,content){
+  let world = JSON.parse(content);
+  //console.log(weighArea(world,10,19));
+  //console.log(weighArea(world,12,13));
+  console.log(getMove(world));
+});
