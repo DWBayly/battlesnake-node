@@ -21,9 +21,8 @@ function getMove(world){
   if((world.you.length<world.width&&world.you.length<world.height)||world.you.health<50){
     console.log(world.you.health)
     response.taunt = 'Going for food';
-    response = setPath(moves,world,response);
+    response = setPath(moves,world,response,'Going for food');
   }else{
-    response.taunt = 'Attacking!';
     if(target === undefined){
       if(world.length<world.height){
         if(world.you.body.data[0].x>world.length/2){
@@ -56,7 +55,7 @@ function getMove(world){
         }
       }
     }
-    targetSquare(target,moves,world,response);
+    targetSquare(target,moves,world,response,'Attacking');
   }
   /*}else{
     response.taunt = 'cycling'
@@ -152,11 +151,11 @@ function cyclePath(moves,world,response){
   return response;
 }
 
-function setPath(moves,world,response){
+function setPath(moves,world,response,message){
   let target = setTarget(world);
-  return targetSquare(target,moves,world,response);
+  return targetSquare(target,moves,world,response,message);
 }
-function targetSquare(target,moves,world,response){
+function targetSquare(target,moves,world,response,message){
     let result = [];
   let x = world.you.body.data[0].x;
   let y = world.you.body.data[0].y;
@@ -182,7 +181,7 @@ function targetSquare(target,moves,world,response){
       response.taunt = 'No better move than' +response.move;
       return response;
     }
-    response.taunt = 'Finding food at x:'+target.x+' y:'+target.y;
+    response.taunt = message+' x:'+target.x+' y:'+target.y;
     response.move =mostSpace(result,world,moves);
   }
   return response;

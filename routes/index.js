@@ -34,6 +34,7 @@ router.post('/move', function (req, res) {
 });
 
 let target = undefined;
+let target = undefined;
 function getMove(world){
   let moves = checkBounds(world,true);
   console.log('Bounds Check Complete, Remaining moves:'+moves)
@@ -48,12 +49,12 @@ function getMove(world){
   }
   let response = {move:moves[Math.floor((Math.random()*moves.length))],taunt:'Picking Random Move'}
   //if(world.you.health<50){
-
+  console.log(world.you.length);
   if((world.you.length<world.width&&world.you.length<world.height)||world.you.health<50){
+    console.log(world.you.health)
     response.taunt = 'Going for food';
-    response = setPath(moves,world,response);
+    response = setPath(moves,world,response,'Going for food');
   }else{
-    response.taunt = 'Attacking!';
     if(target === undefined){
       if(world.length<world.height){
         if(world.you.body.data[0].x>world.length/2){
@@ -86,7 +87,7 @@ function getMove(world){
         }
       }
     }
-    targetSquare(target,moves,world,response);
+    targetSquare(target,moves,world,response,'Attacking');
   }
   /*}else{
     response.taunt = 'cycling'
@@ -182,11 +183,11 @@ function cyclePath(moves,world,response){
   return response;
 }
 
-function setPath(moves,world,response){
+function setPath(moves,world,response,message){
   let target = setTarget(world);
-  return targetSquare(target,moves,world,response);
+  return targetSquare(target,moves,world,response,message);
 }
-function targetSquare(target,moves,world,response){
+function targetSquare(target,moves,world,response,message){
     let result = [];
   let x = world.you.body.data[0].x;
   let y = world.you.body.data[0].y;
@@ -212,7 +213,7 @@ function targetSquare(target,moves,world,response){
       response.taunt = 'No better move than' +response.move;
       return response;
     }
-    response.taunt = 'Finding food at x:'+target.x+' y:'+target.y;
+    response.taunt = message+' x:'+target.x+' y:'+target.y;
     response.move =mostSpace(result,world,moves);
   }
   return response;
@@ -343,12 +344,12 @@ function weighArea(world,a,b,despiration){
   function recursive(x,y){
     //console.log(arr.length);
     //console.log(arr[arr.length-1].length);
-    if(x>arr.length-1 ||y>arr.length-1 ||x<0||y<0){
+    if(x>arr.length-1 ||y>arr[0].length-1 ||x<0||y<0){
       return;
     }
     arr[x][y]=true;
     num+=1;
-    if(num>900){
+    if(num>9000){
       return;
     }
     if(x<arr.length-1){
@@ -374,6 +375,7 @@ function weighArea(world,a,b,despiration){
     return;
   }
   recursive(a,b);
+  console.log(num);
   if(num<world.you.length-1 &&!despiration){
     return 0;
   }
