@@ -39,9 +39,7 @@ function getMove(world){
   if(moves.length===0){
     console.log('No valid Move');
     moves = checkBounds(world,false);
-    if(moves.length!=0){
-      return  {move:moves[Math.floor((Math.random()*moves.length))],taunt:'Picking Random Move'}
-    }else{
+    if(moves.length===0){
       return  {move:'up',taunt:'gg!'};
     }
   }else if (moves.length===1){
