@@ -225,14 +225,18 @@ function mostSpace(moves,world){
           move = moves[i];
         }
       }
+      console.log(moves[i]+':'+temp);
       if(temp>0){
         viables.push(moves[i]);
       }
     }
-  if(!move||temp ===0){
+  if(!move||temp===0){
     console.log('No move found');
-
-    return viables[Math.floor((Math.random()*viables.length))];
+    if(viables.length>0){
+      return viables[Math.floor((Math.random()*viables.length))];
+    }else{
+      return moves[0];
+    }
   }
   return move;
 
@@ -260,7 +264,7 @@ function weighArea(world,a,b){
     }
     arr[x][y]=true;
     num+=1;
-    if(num>9000){
+    if(num>900){
       return;
     }
     if(x<arr.length-1){
@@ -305,5 +309,4 @@ function printArr(arr){
     console.log(temp);
   }
 }
-
 module.exports = router;
