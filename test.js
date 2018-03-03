@@ -156,7 +156,7 @@ function setPath(moves,world,response,message){
   return targetSquare(target,moves,world,response,message);
 }
 function targetSquare(target,moves,world,response,message){
-    let result = [];
+  let result = [];
   let x = world.you.body.data[0].x;
   let y = world.you.body.data[0].y;
   //console.log('in set target:');
@@ -215,37 +215,29 @@ function mostSpace(moves,world,backup){
   for(let i in moves){
       if(moves[i]=== 'up'  ){
         temp = weighArea(world,x,y-1,false);
-        if(temp>highest){
-          highest= temp;
-          move = moves[i];
-        }
       }
       if(moves[i]==='down'){
         temp = weighArea(world,x,y+1,false);
-        if(temp>highest){
-          highest= temp;
-          move = moves[i];
-        }
       }
       if(moves[i]==='left'){
         temp = weighArea(world,x-1,y,false);
-        if(temp>highest){
-          highest= temp;
-          move = moves[i];
-        }
       }
       if(moves[i]==='right'){
         temp = weighArea(world,x+1,y,false);
-        if(temp>highest){
+      }
+      if(temp>highest){
           highest= temp;
           move = moves[i];
         }
-      }
       //console.log(moves[i]+':'+temp);
      /*if(temp>0){
         viables.push(moves[i]);
       }*/
   }
+  if(highest>world.you.length){
+    return move;
+  }
+  //console.log(move);
   for(let i in backup){
           if(backup[i]=== 'up'){
         temp = weighArea(world,x,y-1,true);
