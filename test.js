@@ -10,9 +10,7 @@ function getMove(world){
   if(moves.length===0){
     console.log('No valid Move');
     moves = checkBounds(world,false);
-    if(moves.length!=0){
-      return  {move:moves[Math.floor((Math.random()*moves.length))],taunt:'Picking Random Move'}
-    }else{
+    if(moves.length===0){
       return  {move:'up',taunt:'gg!'};
     }
   }else if (moves.length===1){
@@ -62,7 +60,7 @@ function isBlocked(world,x,y,despiration){
     }
   }
   for(let i in world.snakes.data){
-    if(world.snakes.data[i].name!=world.you.name){
+    if(world.snakes.data[i].name!=world.you.name&&world.snakes.data[i].health!==0){
         for(let a = -1;a<2;a++){
           for(let b = -1 ; b<2;b++){
             //console.log(a,b);
