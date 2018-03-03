@@ -50,7 +50,8 @@ function getMove(world){
   let response = {move:moves[Math.floor((Math.random()*moves.length))],taunt:'Picking Random Move'}
   //if(world.you.health<50){
   console.log(world.you.length);
-  if((world.you.length<world.width&&world.you.length<world.height)||world.you.health<50){
+  if(true){
+  //if((world.you.length<world.width&&world.you.length<world.height)||world.you.health<50){
     console.log(world.you.health)
     response.taunt = 'Going for food';
     response = setPath(moves,world,response,'Going for food');
