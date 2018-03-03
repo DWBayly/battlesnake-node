@@ -33,7 +33,7 @@ router.post('/move', function (req, res) {
   return res.json(data)
 });
 
-let target = undefined;
+//let target = undefined;
 function getMove(world){
   let moves = checkBounds(world,true);
   console.log('Bounds Check Complete, Remaining moves:'+moves)
@@ -48,12 +48,12 @@ function getMove(world){
   }
   let response = {move:moves[Math.floor((Math.random()*moves.length))],taunt:'Picking Random Move'}
   //if(world.you.health<50){
-  console.log(world.you.length);
-  if((world.you.length<world.width&&world.you.length<world.height)||world.you.health<50){
+  //console.log(world.you.length);
+  //if((world.you.length<world.width&&world.you.length<world.height)||world.you.health<50){
     console.log(world.you.health)
     response.taunt = 'Going for food';
     response = setPath(moves,world,response,'Going for food');
-  }else{
+  /*}else{
     if(target === undefined){
       if(world.length<world.height){
         if(world.you.body.data[0].x>world.length/2){
@@ -87,7 +87,7 @@ function getMove(world){
       }
     }
     targetSquare(target,moves,world,response,'Attacking');
-  }
+  }*/
   /*}else{
     response.taunt = 'cycling'
     response = cyclePath(moves,world,response);
