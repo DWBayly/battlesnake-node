@@ -30,6 +30,7 @@ router.post('/move', function (req, res) {
   // Response data
   var data = getMove(req.body);
   console.log('Sending:'+data.move);
+  data.taunt='My life for Hire. DWBayly on github. Email me at dbayly@uvic.ca';
   return res.json(data)
 });
 
