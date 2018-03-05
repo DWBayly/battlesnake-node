@@ -1,3 +1,7 @@
+![alt text](https://ibb.co/b5Lscn)
+A Javascript snake used to competed in Battlesnake 2018. The snake used a sieve technique to eliminate incorrect moves, and a recursive space calculating algorithm to prevent it from being trapped. The snake competed in the intermediate category and was able to beat the challenge snakes for GiftBit and Sendwithus. This snake was trained on the snakedown test servers (https://play.snakedown.com/). At it's height, the snake made it to 6th place. 
+
+
 # battlesnake-node(js)
 
 A simple [BattleSnake AI](https://battlesnake.io) written in Javascript for NodeJS.
