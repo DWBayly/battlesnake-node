@@ -30,33 +30,42 @@ router.post('/move', function (req, res) {
   // Response data
   var data = getMove(req.body);
   console.log('Sending:'+data.move);
+  //Replace debugging taunt with shameless self plug. 
   data.taunt='My life for Hire. DWBayly on github. Email me at dbayly@uvic.ca';
   return res.json(data)
 });
-
-//let target = undefined;
 let target = undefined;
 function getMove(world){
+  //Check bounds with desperation flag set to true. 
+  //This will filter out all illigal moves, and some viable but bad moves like walking into a place where another snake could walk
   let moves = checkBounds(world,true);
   console.log('Bounds Check Complete, Remaining moves:'+moves)
   if(moves.length===0){
     console.log('No valid Move');
+    //Check bounds with desperation flag set to false will only eliminate illigal moves
     moves = checkBounds(world,false);
+    //if no viable moves exit, return 'up' and taunt 'gg'
     if(moves.length===0){
       return  {move:'up',taunt:'gg!'};
     }
   }else if (moves.length===1){
+    //if only one move exists, return it. Reference Harlan Ellison
     return {move:moves[0],taunt:'I have no choice and I must scream'};
   }
+  //Set default response. Pick a random move. 
   let response = {move:moves[Math.floor((Math.random()*moves.length))],taunt:'Picking Random Move'}
-  //if(world.you.health<50){
-  console.log(world.you.length);
+  //console.log(world.you.length);
+  
+  //Attacking is disabled. 
+  //TODO:get attacking to work properly
   if(true){
   //if((world.you.length<world.width&&world.you.length<world.height)||world.you.health<50){
     console.log(world.you.health)
     response.taunt = 'Going for food';
+    //Go for food
     response = setPath(moves,world,response,'Going for food');
   }else{
+    //Attack script, needs work.
     if(target === undefined){
       if(world.length<world.height){
         if(world.you.body.data[0].x>world.length/2){
@@ -100,6 +109,9 @@ function getMove(world){
     }
     targetSquare(target,moves,world,response,'Attacking');
   }
+  
+  //Cycling Script
+  //TODO:Complete cycle script
   /*}else{
     response.taunt = 'cycling'
     response = cyclePath(moves,world,response);
@@ -108,11 +120,13 @@ function getMove(world){
 
   return response;
 }
+//Check bounds returns an array of valid moves
+//Despiration is a boolean that is used to determine if viable but bad moves should be considered. 
 function checkBounds(world,despiration){
-  //console.log(world);
   let result = [];
   let x = world.you.body.data[0].x;
   let y = world.you.body.data[0].y;
+  //For each possible direction, check if it's blocked. 
   if(!isBlocked(world,x+1,y,despiration)){
     result.push('right');
   }
@@ -125,20 +139,23 @@ function checkBounds(world,despiration){
   if(!isBlocked(world,x,y-1,despiration)){
     result.push('up');
   }
-  //console.log('Valid moves:'+result);
   return result;
 }
+//isBlocked returns true if a given move is blocked
+//if despiration === false, isBlocked will also return true on bad moves. 
 function isBlocked(world,x,y,despiration){
+  //Check if move is within the bounds of the map
   if(x>=world.width||y>=world.height||x<0||y<0){
-    //console.log('Move :'+x+','+y+' Out of bounds');
     return true;
   }
+  //Check if a move is will make you collide with your own body
   for(let i in world.you.body.data){
     if(world.you.body.data[i].x ===x && world.you.body.data[i].y ===y){
       //console.log('Move :'+x+','+y+'self collision');
       return true;
     }
   }
+  //check if a move will collide with other snakes
   for(let i in world.snakes.data){
     if(world.snakes.data[i].name!=world.you.name&&world.snakes.data[i].health!==0){
         for(let a = -1;a<2;a++){
@@ -154,7 +171,6 @@ function isBlocked(world,x,y,despiration){
       }
     for(let j in world.snakes.data[i].body.data ){
       if(world.snakes.data[i].body.data[j].x ===x && world.snakes.data[i].body.data[j].y===y){
-        //console.log('Move :'+x+','+y+' collision with enemy snake');
         return true;
       }
     }
@@ -162,6 +178,8 @@ function isBlocked(world,x,y,despiration){
   return false;
 
 }
+//Makes the snake chase it's own tail.
+//Not in use
 function cyclePath(moves,world,response){
   let target = world.you.body.data[world.you.body.data.length-1];
   let x = world.you.body.data[0].x;
@@ -193,7 +211,7 @@ function cyclePath(moves,world,response){
   }
   return response;
 }
-
+//setPath 
 function setPath(moves,world,response,message){
   let target = setTarget(world);
   return targetSquare(target,moves,world,response,message);
@@ -247,8 +265,9 @@ function setTarget(world){
   //console.log(temp);
   return result;
 }
+//mostSpace returns the best move based on space. 
+
 function mostSpace(moves,world,backup){
-  console.log(moves);
   let viables = [];
   let move = false;
   let highest = 0;
@@ -342,7 +361,7 @@ function weighArea(world,a,b,despiration){
     }
     arr.push(temp);
   }
-  printArr(arr);
+  //printArr(arr);
   let num = 0;
   function recursive(x,y){
     //console.log(arr.length);
@@ -384,6 +403,7 @@ function weighArea(world,a,b,despiration){
   }
   return num;
 }
+//Print out the current game board. 
 function printArr(arr){
   let temp ='';
   for(let i in arr[0]){
